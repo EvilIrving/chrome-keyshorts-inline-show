@@ -1,0 +1,141 @@
+{
+  "extName": {
+    "message": "Chrome 快捷键速查",
+    "description": "扩展名称"
+  },
+  "extDesc": {
+    "message": "长按显示 Chrome 常用快捷键，自动识别 Mac/Windows，松开关闭",
+    "description": "扩展描述"
+  },
+  "action_default_title": {
+    "message": "Chrome 快捷键速查",
+    "description": "工具栏图标提示"
+  },
+
+  "section_tabs_windows": {
+    "message": "标签页与窗口",
+    "description": "分类标题"
+  },
+  "section_addressbar_search": {
+    "message": "地址栏与搜索",
+    "description": "分类标题"
+  },
+  "section_mouse_drag": {
+    "message": "点击与拖拽",
+    "description": "分类标题"
+  },
+  "section_page_view": {
+    "message": "网页与视图",
+    "description": "分类标题"
+  },
+  "section_find_features": {
+    "message": "查找与工具",
+    "description": "分类标题"
+  },
+
+  "panel_title_mac": {
+    "message": "Chrome（Mac）常用快捷键",
+    "description": "Mac 布局面板标题"
+  },
+  "panel_title_win": {
+    "message": "Chrome（Windows）常用快捷键",
+    "description": "Windows 布局面板标题"
+  },
+  "panel_aria_label": {
+    "message": "Chrome 快捷键",
+    "description": "快捷键面板无障碍标签"
+  },
+  "panel_hint": {
+    "message": "$1 布局 — 按住 $2 $3 秒显示，松开关闭",
+    "description": "面板底部提示。$1=操作系统, $2=按键名, $3=秒数"
+  },
+
+  "action_new_window": { "message": "新建窗口" },
+  "action_new_incognito_window": { "message": "新建无痕窗口" },
+  "action_quit_chrome": { "message": "退出 Chrome" },
+  "action_close_window": { "message": "关闭当前窗口" },
+  "action_fullscreen": { "message": "全屏 / 退出全屏" },
+  "action_new_tab": { "message": "新建标签页" },
+  "action_reopen_closed_tab": { "message": "恢复刚关的标签页" },
+  "action_close_tab": { "message": "关闭当前标签" },
+  "action_next_prev_tab": { "message": "下一 / 上一标签" },
+  "action_tab_1_to_8": { "message": "第 1–8 个标签" },
+  "action_last_tab": { "message": "最后一个标签" },
+  "action_back_forward": { "message": "后退 / 前进" },
+  "action_focus_address_bar": { "message": "聚焦地址栏" },
+  "action_search_default_engine": { "message": "地址栏搜索" },
+  "action_switch_search_engine": { "message": "切换搜索引擎" },
+  "action_autocomplete_www": { "message": "补全网址并打开" },
+  "action_open_url_bg_tab": { "message": "后台新标签打开网址" },
+  "action_open_link_bg_tab": { "message": "后台新标签打开链接" },
+  "action_open_link_fg_tab": { "message": "前台新标签打开链接" },
+  "action_open_link_new_window": { "message": "新窗口打开链接" },
+  "action_download_link": { "message": "下载链接" },
+  "action_drag_tab_new_window": { "message": "拖出标签为新窗口" },
+  "action_drag_tab_into_window": { "message": "拖入其他窗口" },
+  "action_print": { "message": "打印" },
+  "action_save_page": { "message": "保存网页" },
+  "action_hard_reload": { "message": "强制刷新" },
+  "action_stop_loading": { "message": "停止加载" },
+  "action_next_prev_focusable": { "message": "上下切换焦点" },
+  "action_scroll_page": { "message": "上下滚动一屏" },
+  "action_zoom": { "message": "放大 / 缩小 / 默认" },
+  "action_bookmark": { "message": "添加书签" },
+  "action_bookmark_all_tabs": { "message": "书签所有标签" },
+  "action_view_source": { "message": "查看源代码" },
+  "action_open_console": { "message": "打开控制台" },
+  "action_toggle_bookmark_bar": { "message": "切换书签栏" },
+  "action_bookmark_manager": { "message": "书签管理器" },
+  "action_settings": { "message": "设置" },
+  "action_history": { "message": "历史记录" },
+  "action_downloads": { "message": "下载内容" },
+  "action_find_in_page": { "message": "在网页中查找" },
+  "action_find_next_prev": { "message": "查找下一处 / 上一处" },
+  "action_devtools": { "message": "开发者工具" },
+  "action_clear_browsing_data": { "message": "清除浏览数据" },
+  "action_switch_user": { "message": "切换账号" },
+
+  "trigger_alt_right": { "message": "右侧 Alt" },
+  "trigger_alt_left": { "message": "左侧 Alt" },
+  "trigger_shift_right": { "message": "右侧 Shift" },
+  "trigger_shift_left": { "message": "左侧 Shift" },
+  "trigger_ctrl_right": { "message": "右侧 Ctrl" },
+
+  "options_title": {
+    "message": "快捷键速查 — 选项",
+    "description": "选项页浏览器标签标题"
+  },
+  "options_heading": {
+    "message": "选项",
+    "description": "选项页标题"
+  },
+  "options_trigger_label": { "message": "触发键" },
+  "options_trigger_hint": { "message": "键名因键盘布局而异" },
+  "options_hold_label": { "message": "长按时长" },
+  "options_hold_hint": { "message": "建议 500～1500 ms" },
+  "options_platform_label": { "message": "Mac / Windows" },
+  "options_saved": { "message": "已保存" },
+  "options_platform_auto": { "message": "自动" },
+  "options_platform_mac": { "message": "Mac 布局" },
+  "options_platform_win": { "message": "Windows 布局" },
+
+  "shortcut_fn_esc_mac": { "message": "Fn + F（或 Esc）" },
+  "shortcut_back_forward_mac": { "message": "\u2318 + [ / ] 或 \u2190 / \u2192" },
+  "shortcut_type_return_mac": { "message": "输入后按 Return" },
+  "shortcut_type_return_win": { "message": "输入后按 Enter" },
+  "shortcut_engine_tab": { "message": "输入引擎名后按 Tab" },
+  "shortcut_url_bg_mac": { "message": "输入后 \u2318 + Return" },
+  "shortcut_url_bg_win": { "message": "输入后按 Alt + Enter" },
+  "shortcut_drag_out": { "message": "拖出标签栏" },
+  "shortcut_drag_in": { "message": "拖入窗口" },
+  "shortcut_space_scroll": { "message": "空格 / Shift + 空格" },
+  "shortcut_devtools_win": { "message": "F12 或 Ctrl + Shift + I" },
+  "shortcut_next_prev_tab_win": { "message": "Ctrl + Tab / Shift + Tab 或 Ctrl + PgDn / PgUp" },
+  "shortcut_click_link_bg_mac": { "message": "\u2318 + 点击链接" },
+  "shortcut_click_link_fg_mac": { "message": "\u2318 + Shift + 点击链接" },
+  "shortcut_click_link_win_new": { "message": "Shift + 点击链接" },
+  "shortcut_click_link_dl_mac": { "message": "Option + 点击链接" },
+  "shortcut_click_link_bg_win": { "message": "Ctrl + 点击链接" },
+  "shortcut_click_link_fg_win": { "message": "Ctrl + Shift + 点击链接" },
+  "shortcut_click_link_dl_win": { "message": "Alt + 点击链接" }
+}

@@ -10,13 +10,18 @@
     sheetPlatform: "auto",
   };
 
-  const TRIGGER_LABELS = {
-    AltRight: "右侧 Alt",
-    AltLeft: "左侧 Alt",
-    ShiftRight: "右侧 Shift",
-    ShiftLeft: "左侧 Shift",
-    ControlRight: "右侧 Ctrl",
+  const TRIGGER_CODE_KEYS = {
+    AltRight: "trigger_alt_right",
+    AltLeft: "trigger_alt_left",
+    ShiftRight: "trigger_shift_right",
+    ShiftLeft: "trigger_shift_left",
+    ControlRight: "trigger_ctrl_right",
   };
+
+  function getTriggerLabel(code) {
+    const key = TRIGGER_CODE_KEYS[code];
+    return key ? chrome.i18n.getMessage(key) : code;
+  }
 
   /** @type {typeof DEFAULT_SETTINGS} */
   const config = { ...DEFAULT_SETTINGS };
@@ -24,142 +29,142 @@
   /** 按分类列出；略去约 20% 较少用项 */
   const MAC_SECTIONS = [
     {
-      title: "标签页与窗口",
+      titleKey: "section_tabs_windows",
       rows: [
-        ["新建窗口", "⌘ + N"],
-        ["新建无痕窗口", "⌘ + Shift + N"],
-        ["退出 Chrome", "⌘ + Q"],
-        ["全屏 / 退出全屏", "Fn + F（或 Esc）"],
-        ["新建标签页", "⌘ + T"],
-        ["恢复刚关的标签页", "⌘ + Shift + T"],
-        ["关闭当前标签", "⌘ + W"],
-        ["下一 / 上一标签", "⌘ + Option + → / ←"],
-        ["第 1–8 个标签", "⌘ + 1 … 8"],
-        ["最后一个标签", "⌘ + 9"],
-        ["后退 / 前进", "⌘ + [ / ] 或 ← / →"],
+        ["action_new_window", "\u2318 + N"],
+        ["action_new_incognito_window", "\u2318 + Shift + N"],
+        ["action_quit_chrome", "\u2318 + Q"],
+        ["action_fullscreen", "shortcut_fn_esc_mac"],
+        ["action_new_tab", "\u2318 + T"],
+        ["action_reopen_closed_tab", "\u2318 + Shift + T"],
+        ["action_close_tab", "\u2318 + W"],
+        ["action_next_prev_tab", "\u2318 + Option + \u2192 / \u2190"],
+        ["action_tab_1_to_8", "\u2318 + 1 \u2026 8"],
+        ["action_last_tab", "\u2318 + 9"],
+        ["action_back_forward", "shortcut_back_forward_mac"],
       ],
     },
     {
-      title: "地址栏与搜索",
+      titleKey: "section_addressbar_search",
       rows: [
-        ["聚焦地址栏", "⌘ + L"],
-        ["用默认引擎搜索", "输入关键词后按 Return"],
-        ["换搜索引擎", "输入引擎名后按 Tab"],
-        ["补全 www…com 并打开", "Ctrl + Return"],
-        ["后台新标签打开网址", "输入后 ⌘ + Return"],
+        ["action_focus_address_bar", "\u2318 + L"],
+        ["action_search_default_engine", "shortcut_type_return_mac"],
+        ["action_switch_search_engine", "shortcut_engine_tab"],
+        ["action_autocomplete_www", "Ctrl + Return"],
+        ["action_open_url_bg_tab", "shortcut_url_bg_mac"],
       ],
     },
     {
-      title: "鼠标与拖拽",
+      titleKey: "section_mouse_drag",
       rows: [
-        ["后台新标签打开链接", "⌘ + 点击链接"],
-        ["前台新标签打开链接", "⌘ + Shift + 点击链接"],
-        ["新窗口打开链接", "Shift + 点击链接"],
-        ["下载链接", "Option + 点击链接"],
-        ["标签拖成新窗口", "将标签拖出标签栏"],
-        ["标签并入其他窗口", "将标签拖入窗口"],
+        ["action_open_link_bg_tab", "shortcut_click_link_bg_mac"],
+        ["action_open_link_fg_tab", "shortcut_click_link_fg_mac"],
+        ["action_open_link_new_window", "shortcut_click_link_win_new"],
+        ["action_download_link", "shortcut_click_link_dl_mac"],
+        ["action_drag_tab_new_window", "shortcut_drag_out"],
+        ["action_drag_tab_into_window", "shortcut_drag_in"],
       ],
     },
     {
-      title: "网页与视图",
+      titleKey: "section_page_view",
       rows: [
-        ["打印", "⌘ + P"],
-        ["保存网页", "⌘ + S"],
-        ["强制刷新（忽略缓存）", "⌘ + Shift + R"],
-        ["停止加载", "Esc"],
-        ["下一个 / 上一个可聚焦项", "Tab / Shift + Tab"],
-        ["向下一屏 / 向上一屏", "空格 / Shift + 空格"],
-        ["放大 / 缩小 / 默认", "⌘ + + / − / 0"],
-        ["添加书签", "⌘ + D"],
-        ["全部标签存为书签文件夹", "⌘ + Shift + D"],
-        ["查看源代码", "⌘ + Option + U"],
-        ["打开控制台", "⌘ + Option + J"],
+        ["action_print", "\u2318 + P"],
+        ["action_save_page", "\u2318 + S"],
+        ["action_hard_reload", "\u2318 + Shift + R"],
+        ["action_stop_loading", "Esc"],
+        ["action_next_prev_focusable", "Tab / Shift + Tab"],
+        ["action_scroll_page", "shortcut_space_scroll"],
+        ["action_zoom", "\u2318 + + / \u2212 / 0"],
+        ["action_bookmark", "\u2318 + D"],
+        ["action_bookmark_all_tabs", "\u2318 + Shift + D"],
+        ["action_view_source", "\u2318 + Option + U"],
+        ["action_open_console", "\u2318 + Option + J"],
       ],
     },
     {
-      title: "查找与 Chrome 功能",
+      titleKey: "section_find_features",
       rows: [
-        ["显示/隐藏书签栏", "⌘ + Shift + B"],
-        ["书签管理器", "⌘ + Option + B"],
-        ["设置", "⌘ + ,"],
-        ["历史记录", "⌘ + Y"],
-        ["下载内容", "⌘ + Shift + J"],
-        ["在网页中查找", "⌘ + F"],
-        ["查找下一处 / 上一处", "⌘ + G / ⌘ + Shift + G"],
-        ["开发者工具", "⌘ + Option + I"],
-        ["清除浏览数据", "⌘ + Shift + Delete"],
-        ["切换用户 / 访客", "⌘ + Shift + M"],
+        ["action_toggle_bookmark_bar", "\u2318 + Shift + B"],
+        ["action_bookmark_manager", "\u2318 + Option + B"],
+        ["action_settings", "\u2318 + ,"],
+        ["action_history", "\u2318 + Y"],
+        ["action_downloads", "\u2318 + Shift + J"],
+        ["action_find_in_page", "\u2318 + F"],
+        ["action_find_next_prev", "\u2318 + G / \u2318 + Shift + G"],
+        ["action_devtools", "\u2318 + Option + I"],
+        ["action_clear_browsing_data", "\u2318 + Shift + Delete"],
+        ["action_switch_user", "\u2318 + Shift + M"],
       ],
     },
   ];
 
   const WIN_SECTIONS = [
     {
-      title: "标签页与窗口",
+      titleKey: "section_tabs_windows",
       rows: [
-        ["新建窗口", "Ctrl + N"],
-        ["新建无痕窗口", "Ctrl + Shift + N"],
-        ["关闭当前窗口", "Alt + F4"],
-        ["全屏 / 退出全屏", "F11"],
-        ["新建标签页", "Ctrl + T"],
-        ["恢复刚关的标签页", "Ctrl + Shift + T"],
-        ["关闭当前标签", "Ctrl + W"],
-        ["下一 / 上一标签", "Ctrl + Tab / Shift + Tab 或 Ctrl + PgDn / PgUp"],
-        ["第 1–8 个标签", "Ctrl + 1 … 8"],
-        ["最后一个标签", "Ctrl + 9"],
-        ["后退 / 前进", "Alt + ← / →"],
+        ["action_new_window", "Ctrl + N"],
+        ["action_new_incognito_window", "Ctrl + Shift + N"],
+        ["action_close_window", "Alt + F4"],
+        ["action_fullscreen", "F11"],
+        ["action_new_tab", "Ctrl + T"],
+        ["action_reopen_closed_tab", "Ctrl + Shift + T"],
+        ["action_close_tab", "Ctrl + W"],
+        ["action_next_prev_tab", "shortcut_next_prev_tab_win"],
+        ["action_tab_1_to_8", "Ctrl + 1 \u2026 8"],
+        ["action_last_tab", "Ctrl + 9"],
+        ["action_back_forward", "Alt + \u2190 / \u2192"],
       ],
     },
     {
-      title: "地址栏与搜索",
+      titleKey: "section_addressbar_search",
       rows: [
-        ["聚焦地址栏", "Ctrl + L"],
-        ["用默认引擎搜索", "输入关键词后按 Enter"],
-        ["换搜索引擎", "输入引擎名后按 Tab"],
-        ["补全 www…com 并打开", "Ctrl + Enter"],
-        ["后台新标签打开网址", "输入网址后 Alt + Enter"],
+        ["action_focus_address_bar", "Ctrl + L"],
+        ["action_search_default_engine", "shortcut_type_return_win"],
+        ["action_switch_search_engine", "shortcut_engine_tab"],
+        ["action_autocomplete_www", "Ctrl + Enter"],
+        ["action_open_url_bg_tab", "shortcut_url_bg_win"],
       ],
     },
     {
-      title: "鼠标与拖拽",
+      titleKey: "section_mouse_drag",
       rows: [
-        ["后台新标签打开链接", "Ctrl + 点击链接"],
-        ["前台新标签打开链接", "Ctrl + Shift + 点击链接"],
-        ["新窗口打开链接", "Shift + 点击链接"],
-        ["下载链接", "Alt + 点击链接"],
-        ["标签拖成新窗口", "将标签拖出标签栏"],
-        ["标签并入其他窗口", "将标签拖入窗口"],
+        ["action_open_link_bg_tab", "shortcut_click_link_bg_win"],
+        ["action_open_link_fg_tab", "shortcut_click_link_fg_win"],
+        ["action_open_link_new_window", "shortcut_click_link_win_new"],
+        ["action_download_link", "shortcut_click_link_dl_win"],
+        ["action_drag_tab_new_window", "shortcut_drag_out"],
+        ["action_drag_tab_into_window", "shortcut_drag_in"],
       ],
     },
     {
-      title: "网页与视图",
+      titleKey: "section_page_view",
       rows: [
-        ["打印", "Ctrl + P"],
-        ["保存网页", "Ctrl + S"],
-        ["强制刷新（忽略缓存）", "Ctrl + Shift + R"],
-        ["停止加载", "Esc"],
-        ["下一个 / 上一个可聚焦项", "Tab / Shift + Tab"],
-        ["向下一屏 / 向上一屏", "空格 / Shift + 空格"],
-        ["放大 / 缩小 / 默认", "Ctrl + + / − / 0"],
-        ["添加书签", "Ctrl + D"],
-        ["全部标签存为书签文件夹", "Ctrl + Shift + D"],
-        ["查看源代码", "Ctrl + U"],
-        ["打开控制台", "Ctrl + Shift + J"],
+        ["action_print", "Ctrl + P"],
+        ["action_save_page", "Ctrl + S"],
+        ["action_hard_reload", "Ctrl + Shift + R"],
+        ["action_stop_loading", "Esc"],
+        ["action_next_prev_focusable", "Tab / Shift + Tab"],
+        ["action_scroll_page", "shortcut_space_scroll"],
+        ["action_zoom", "Ctrl + + / \u2212 / 0"],
+        ["action_bookmark", "Ctrl + D"],
+        ["action_bookmark_all_tabs", "Ctrl + Shift + D"],
+        ["action_view_source", "Ctrl + U"],
+        ["action_open_console", "Ctrl + Shift + J"],
       ],
     },
     {
-      title: "查找与 Chrome 功能",
+      titleKey: "section_find_features",
       rows: [
-        ["显示/隐藏书签栏", "Ctrl + Shift + B"],
-        ["书签管理器", "Ctrl + Shift + O"],
-        ["设置", "Ctrl + ,"],
-        ["历史记录", "Ctrl + H"],
-        ["下载内容", "Ctrl + J"],
-        ["在网页中查找", "Ctrl + F"],
-        ["查找下一处 / 上一处", "Ctrl + G / Ctrl + Shift + G"],
-        ["开发者工具", "F12 或 Ctrl + Shift + I"],
-        ["清除浏览数据", "Ctrl + Shift + Delete"],
-        ["切换用户 / 访客", "Ctrl + Shift + M"],
+        ["action_toggle_bookmark_bar", "Ctrl + Shift + B"],
+        ["action_bookmark_manager", "Ctrl + Shift + O"],
+        ["action_settings", "Ctrl + ,"],
+        ["action_history", "Ctrl + H"],
+        ["action_downloads", "Ctrl + J"],
+        ["action_find_in_page", "Ctrl + F"],
+        ["action_find_next_prev", "Ctrl + G / Ctrl + Shift + G"],
+        ["action_devtools", "shortcut_devtools_win"],
+        ["action_clear_browsing_data", "Ctrl + Shift + Delete"],
+        ["action_switch_user", "Ctrl + Shift + M"],
       ],
     },
   ];
@@ -186,10 +191,10 @@
   }
 
   function buildHint(kind) {
-    const name = TRIGGER_LABELS[config.triggerCode] || config.triggerCode;
+    const name = getTriggerLabel(config.triggerCode);
     const sec = formatHoldSeconds(config.holdMs);
     const os = kind === "mac" ? "Mac" : "Windows";
-    return `当前：${os} 布局。按住 ${name} 约 ${sec} 秒后显示；松开即关闭。完整列表见 Chrome 帮助中心；触发键与时长可在扩展选项中修改。`;
+    return chrome.i18n.getMessage("panel_hint", [os, name, sec]);
   }
 
   function buildSectionBlock(section) {
@@ -198,15 +203,15 @@
 
     const title = document.createElement("h3");
     title.className = "block-title";
-    title.textContent = section.title;
+    title.textContent = chrome.i18n.getMessage(section.titleKey);
 
     const table = document.createElement("table");
-    for (const [action, combo] of section.rows) {
+    for (const [actionKey, combo] of section.rows) {
       const tr = document.createElement("tr");
       const td1 = document.createElement("td");
-      td1.textContent = action;
+      td1.textContent = chrome.i18n.getMessage(actionKey);
       const td2 = document.createElement("td");
-      td2.textContent = combo;
+      td2.textContent = chrome.i18n.getMessage(combo) || combo;
       tr.appendChild(td1);
       tr.appendChild(td2);
       table.appendChild(tr);
@@ -321,15 +326,14 @@
   function populatePanelBody(root) {
     const kind = resolveSheetKind();
     const sections = kind === "mac" ? MAC_SECTIONS : WIN_SECTIONS;
-    const titleText =
-      kind === "mac" ? "Chrome（Mac）常用快捷键" : "Chrome（Windows）常用快捷键";
+    const titleKey = kind === "mac" ? "panel_title_mac" : "panel_title_win";
 
     const h2 = root.querySelector("h2.chrome-keys-title");
     const grid = root.querySelector(".chrome-keys-grid");
     const hint = root.querySelector(".hint");
     if (!h2 || !grid || !hint) return;
 
-    h2.textContent = titleText;
+    h2.textContent = chrome.i18n.getMessage(titleKey);
     grid.replaceChildren();
     for (const section of sections) {
       grid.appendChild(buildSectionBlock(section));
@@ -347,7 +351,7 @@
     root = document.createElement("div");
     root.id = PANEL_ID;
     root.setAttribute("role", "dialog");
-    root.setAttribute("aria-label", "Chrome 快捷键");
+    root.setAttribute("aria-label", chrome.i18n.getMessage("panel_aria_label"));
 
     injectPanelStyles(root);
 

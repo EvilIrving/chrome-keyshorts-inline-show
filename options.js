@@ -5,17 +5,17 @@ const DEFAULT_SETTINGS = {
 };
 
 const TRIGGER_OPTIONS = [
-  { code: "AltRight", label: "右侧 Alt（AltRight）" },
-  { code: "AltLeft", label: "左侧 Alt（AltLeft）" },
-  { code: "ShiftRight", label: "右侧 Shift（ShiftRight）" },
-  { code: "ShiftLeft", label: "左侧 Shift（ShiftLeft）" },
-  { code: "ControlRight", label: "右侧 Ctrl（ControlRight）" },
+  { code: "AltRight", labelKey: "trigger_alt_right" },
+  { code: "AltLeft", labelKey: "trigger_alt_left" },
+  { code: "ShiftRight", labelKey: "trigger_shift_right" },
+  { code: "ShiftLeft", labelKey: "trigger_shift_left" },
+  { code: "ControlRight", labelKey: "trigger_ctrl_right" },
 ];
 
 const PLATFORM_OPTIONS = [
-  { value: "auto", label: "自动（按系统识别）" },
-  { value: "mac", label: "始终使用 Mac 布局" },
-  { value: "win", label: "始终使用 Windows 布局" },
+  { value: "auto", labelKey: "options_platform_auto" },
+  { value: "mac", labelKey: "options_platform_mac" },
+  { value: "win", labelKey: "options_platform_win" },
 ];
 
 function fillSelect(select, options, getValue, getLabel) {
@@ -28,7 +28,20 @@ function fillSelect(select, options, getValue, getLabel) {
   }
 }
 
+function setStaticText() {
+  document.title = chrome.i18n.getMessage("options_title");
+  document.getElementById("page-title").textContent = chrome.i18n.getMessage("options_title");
+  document.getElementById("heading").textContent = chrome.i18n.getMessage("options_heading");
+  document.getElementById("trigger-label").textContent = chrome.i18n.getMessage("options_trigger_label");
+  document.getElementById("trigger-hint").textContent = chrome.i18n.getMessage("options_trigger_hint");
+  document.getElementById("hold-label").textContent = chrome.i18n.getMessage("options_hold_label");
+  document.getElementById("hold-hint").textContent = chrome.i18n.getMessage("options_hold_hint");
+  document.getElementById("platform-label").textContent = chrome.i18n.getMessage("options_platform_label");
+}
+
 function load() {
+  setStaticText();
+
   const trigger = document.getElementById("trigger");
   const holdMs = document.getElementById("holdMs");
   const sheetPlatform = document.getElementById("sheetPlatform");
@@ -37,13 +50,13 @@ function load() {
     trigger,
     TRIGGER_OPTIONS,
     (o) => o.code,
-    (o) => o.label
+    (o) => chrome.i18n.getMessage(o.labelKey)
   );
   fillSelect(
     sheetPlatform,
     PLATFORM_OPTIONS,
     (o) => o.value,
-    (o) => o.label
+    (o) => chrome.i18n.getMessage(o.labelKey)
   );
 
   chrome.storage.sync.get(DEFAULT_SETTINGS, (items) => {
@@ -70,7 +83,7 @@ function save() {
   };
 
   chrome.storage.sync.set(payload, () => {
-    status.textContent = "已保存";
+    status.textContent = chrome.i18n.getMessage("options_saved");
     window.setTimeout(() => {
       status.textContent = "";
     }, 2000);

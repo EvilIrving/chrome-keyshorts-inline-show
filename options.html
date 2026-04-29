@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
   <meta charset="utf-8" />
-  <title>Chrome 快捷键速查 — 选项</title>
+  <title id="page-title"></title>
   <style>
     body {
       font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -46,20 +46,20 @@
   </style>
 </head>
 <body>
-  <h1>快捷键速查 — 选项</h1>
+  <h1 id="heading"></h1>
 
   <div class="field">
-    <label for="trigger">触发键<span id="trigger-hint" class="sub">在部分键盘布局下键名可能不同。</span></label>
+    <label for="trigger"><span id="trigger-label"></span><span id="trigger-hint" class="sub"></span></label>
     <select id="trigger" aria-describedby="trigger-hint"></select>
   </div>
 
   <div class="field">
-    <label for="holdMs">长按时长 <span class="sub">建议 500 ～ 1500 ms。</span></label>
+    <label for="holdMs"><span id="hold-label"></span> <span id="hold-hint" class="sub"></span></label>
     <input id="holdMs" type="number" min="200" max="5000" step="50" />
   </div>
 
   <div class="field">
-    <label for="sheetPlatform">Mac/Windows</label>
+    <label for="sheetPlatform" id="platform-label"></label>
     <select id="sheetPlatform"></select>
   </div>
 
