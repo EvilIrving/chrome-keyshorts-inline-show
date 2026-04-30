@@ -1,122 +1,661 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chrome 热键 - 隐私政策</title>
+  <title>Chrome Hotkeys — Press &amp; hold, see hotkeys, release</title>
+  <meta name="description" content="Hold a configurable key on any webpage to see a floating Chrome hotkey panel. Auto-detects Mac or Windows. Zero data collection." />
   <style>
     :root {
       color-scheme: light;
-      --bg: #f6f8fb;
-      --card: #ffffff;
-      --text: #18212f;
-      --muted: #5d6b82;
-      --line: #d9e0ea;
-      --brand: #1d4ed8;
+      --bg:       oklch(0.985 0.003 84);
+      --surface:  oklch(1 0 0);
+      --text:     oklch(0.17 0.006 84);
+      --muted:    oklch(0.46 0.012 80);
+      --faint:    oklch(0.58 0.01 80);
+      --accent:   oklch(0.52 0.16 42);
+      --accent-soft: oklch(0.935 0.04 55);
+      --border:   oklch(0.875 0.008 80);
+      --key-bg:   oklch(0.97 0.005 84);
+      --radius:   10px;
     }
-    * {
-      box-sizing: border-box;
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg:       oklch(0.155 0.006 84);
+        --surface:  oklch(0.195 0.006 84);
+        --text:     oklch(0.91 0.004 84);
+        --muted:    oklch(0.62 0.014 80);
+        --faint:    oklch(0.47 0.012 80);
+        --accent:   oklch(0.66 0.14 50);
+        --accent-soft: oklch(0.21 0.04 52);
+        --border:   oklch(0.27 0.012 80);
+        --key-bg:   oklch(0.22 0.008 84);
+      }
     }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
       color: var(--text);
-      background: linear-gradient(180deg, #edf3ff 0%, var(--bg) 220px);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
     }
-    main {
-      width: min(860px, calc(100% - 32px));
-      margin: 40px auto 64px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 28px 24px;
-      box-shadow: 0 18px 48px rgba(17, 24, 39, 0.08);
+
+    /* ── Header ── */
+
+    body > header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 36px;
+      padding: 36px 44px 0;
+      max-width: 840px;
+      margin: 0 auto;
     }
-    h1, h2 {
-      line-height: 1.25;
-      margin: 0 0 14px;
-    }
-    h1 {
-      font-size: 30px;
-    }
-    h2 {
-      font-size: 20px;
-      margin-top: 28px;
-    }
-    p, li {
-      margin: 0 0 12px;
-    }
-    ul {
-      padding-left: 20px;
-      margin: 0;
-    }
-    .meta {
-      color: var(--muted);
-      margin-bottom: 18px;
-    }
-    .pill {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #e8f0ff;
-      color: var(--brand);
-      font-size: 13px;
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.15rem;
       font-weight: 600;
-      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      white-space: nowrap;
+      text-decoration: none;
     }
-    a {
-      color: var(--brand);
+
+    .brand img {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
     }
+
+    /* ── Lang switcher ── */
+
+    .lang-switch {
+      display: flex;
+      gap: 2px;
+      margin-left: auto;
+      font-size: 0.82rem;
+    }
+
+    .lang-switch button {
+      background: none;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      color: var(--faint);
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: 510;
+      transition: color 0.15s;
+    }
+
+    .lang-switch button:hover { color: var(--muted); }
+    .lang-switch button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    .lang-switch button.active {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .lang-switch .sep {
+      color: var(--border);
+      align-self: center;
+      user-select: none;
+    }
+
+    /* ── Tabs ── */
+
+    nav.tabs {
+      display: flex;
+      gap: 2px;
+    }
+
+    nav.tabs a {
+      display: inline-flex;
+      align-items: center;
+      height: 36px;
+      padding: 0 16px;
+      font-size: 0.9rem;
+      font-weight: 510;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      transition: color 0.2s ease-out;
+      letter-spacing: 0.01em;
+    }
+
+    nav.tabs a::after {
+      content: "";
+      position: absolute;
+      inset: auto 6px 0 6px;
+      height: 2.5px;
+      background: var(--accent);
+      border-radius: 2.5px 2.5px 0 0;
+      transform: scaleX(0);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    nav.tabs a:hover { color: var(--text); }
+    nav.tabs a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+      border-radius: 8px;
+    }
+
+    nav.tabs a[aria-current="page"] {
+      color: var(--accent);
+    }
+    nav.tabs a[aria-current="page"]::after {
+      transform: scaleX(1);
+    }
+
+    /* ── Main ── */
+
+    body > main {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 52px 44px 72px;
+    }
+
+    section[role="tabpanel"] {
+      display: none;
+    }
+    section[role="tabpanel"].active {
+      display: block;
+      animation: fade-in 0.3s ease-out;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Typography ── */
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.18;
+      margin: 0 0 10px;
+      color: var(--text);
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.35;
+      margin: 40px 0 10px;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    h2:first-child { margin-top: 0; }
+
+    p, li {
+      max-width: 68ch;
+      margin: 0 0 10px;
+      color: var(--muted);
+    }
+
+    .lede {
+      font-size: 1.08rem;
+      color: var(--muted);
+      max-width: 58ch;
+      margin-bottom: 32px;
+    }
+
+    a:not(.tab):not(.support-link) {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    a:not(.tab):not(.support-link):hover { text-decoration-thickness: 2px; }
+
+    /* ── Home — Feature list ── */
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 30px 0 0;
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 18px 0;
+      border-top: 1px solid var(--border);
+      max-width: none;
+    }
+
+    .feature-list li:last-child { padding-bottom: 0; }
+
+    .feature-list .marker {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .feature-list .body strong {
+      display: block;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+      font-size: 0.98rem;
+    }
+    .feature-list .body span {
+      display: block;
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Steps ── */
+
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0;
+      counter-reset: step;
+    }
+
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+      margin-bottom: 12px;
+      max-width: 64ch;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--text);
+      color: var(--bg);
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      position: relative;
+      top: 2px;
+    }
+
+    /* ── Keycap visual ── */
+
+    .keycap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 26px;
+      padding: 0 7px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.82rem;
+      font-weight: 510;
+      color: var(--text);
+      background: var(--key-bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      border-bottom-width: 2.5px;
+      line-height: 1;
+    }
+
+    /* ── Privacy ── */
+
+    .effective-date {
+      font-size: 0.88rem;
+      color: var(--faint);
+      margin-bottom: 32px;
+    }
+
     code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 0.95em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9em;
+      background: var(--accent-soft);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: oklch(0.48 0.14 42);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      code { color: oklch(0.72 0.12 50); }
+    }
+
+    /* ── Support ── */
+
+    .support-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 22px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 510;
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease-out, background 0.2s ease-out;
+    }
+    .support-link:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .support-link svg {
+      width: 18px;
+      height: 18px;
+      opacity: 0.55;
+    }
+
+    dl {
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    dt {
+      font-weight: 600;
+      padding-top: 18px;
+      color: var(--text);
+    }
+
+    dd {
+      margin: 4px 0 18px;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ── */
+
+    body > footer {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 28px 44px 40px;
+      border-top: 1px solid var(--border);
+      font-size: 0.84rem;
+      color: var(--faint);
+    }
+
+    body > footer nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+    }
+
+    body > footer a {
+      color: var(--faint);
+      text-decoration: none;
+    }
+    body > footer a:hover { color: var(--muted); }
+
+    /* ── Responsive ── */
+
+    @media (max-width: 600px) {
+      body > header {
+        padding: 22px 20px 0;
+        gap: 10px 20px;
+      }
+      body > main {
+        padding: 36px 20px 52px;
+      }
+      body > footer {
+        padding: 24px 20px 36px;
+      }
+      h1 { font-size: 1.55rem; }
+      nav.tabs a { padding: 0 12px; font-size: 0.85rem; }
+      .feature-list li { flex-direction: column; gap: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      section[role="tabpanel"].active { animation: none; }
+      nav.tabs a::after { transition: none; }
+      nav.tabs a { transition: none; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <div class="pill">Chrome Extension Privacy Policy</div>
-    <h1>Chrome 热键 - 隐私政策</h1>
-    <p class="meta">生效日期：2026-04-17</p>
 
-    <p>Chrome 热键是一款本地运行的 Chrome 扩展，用于在网页内长按指定按键时显示 Chrome 常用热键面板。</p>
+<header>
+  <a class="brand" href="#home">
+    <img src="logo-trans.png" alt="" width="28" height="28" />
+    Chrome Hotkeys
+  </a>
+  <nav class="tabs" role="tablist">
+    <a href="#home" role="tab" id="tab-home" data-en="Home" data-zh="首页">Home</a>
+    <a href="#privacy" role="tab" id="tab-privacy" data-en="Privacy" data-zh="隐私">Privacy</a>
+    <a href="#support" role="tab" id="tab-support" data-en="Support" data-zh="支持">Support</a>
+  </nav>
+  <div class="lang-switch" role="group" aria-label="Language switcher">
+    <button data-lang="en" class="active" aria-pressed="true">EN</button>
+    <span class="sep" aria-hidden="true">/</span>
+    <button data-lang="zh" aria-pressed="false">中文</button>
+  </div>
+</header>
 
-    <h2>1. 我们收集什么信息</h2>
-    <p>本扩展默认不收集、不上传、不出售任何个人信息。</p>
-    <ul>
-      <li>扩展会在本地保存 3 项用户设置：触发键、长按时长、热键布局（自动 / Mac / Windows）。</li>
-      <li>这些设置通过 Chrome 提供的 <code>chrome.storage.sync</code> 保存，用于在用户自己的 Chrome 浏览器中同步。</li>
-      <li>扩展不会读取账号密码、表单内容、浏览历史、网页正文、聊天内容、支付信息或身份信息。</li>
+<main>
+  <section role="tabpanel" id="home" aria-labelledby="tab-home">
+    <h1 data-en="Press &amp; hold. See hotkeys. Release." data-zh="按住出热键，松手即关闭">Press &amp; hold. See hotkeys. Release.</h1>
+    <p class="lede" data-en="A lightweight Chrome extension that shows a hotkey panel when you hold a configurable key on any webpage. Auto-detects Mac or Windows." data-zh="轻量 Chrome 扩展：在任意网页长按触发键，弹出常用快捷键面板。自动识别 Mac 或 Windows 键位布局。">A lightweight Chrome extension that shows a hotkey panel when you hold a configurable key on any webpage. Auto-detects Mac or Windows.</p>
+
+    <ul class="feature-list">
+      <li>
+        <span class="marker" aria-hidden="true">&#x2328;</span>
+        <span class="body"><strong data-en="Keyboard only" data-zh="纯键盘操作">Keyboard only</strong><span data-en="Hold <kbd>Right Alt</kbd> for 0.8 s to open, release to dismiss. No mouse needed." data-zh="按住 <span class='keycap'>Right Alt</span> 0.8 秒弹出面板，松手关闭。手不离键盘。">Hold <span class="keycap">Right Alt</span> for 0.8 s to open, release to dismiss. No mouse needed.</span></span>
+      </li>
+      <li>
+        <span class="marker" aria-hidden="true">&#x21CC;</span>
+        <span class="body"><strong data-en="Platform auto-detect" data-zh="自动识别平台">Platform auto-detect</strong><span data-en="Auto-detects Mac or Windows and shows correct key labels. Or lock to one layout in options." data-zh="自动检测 Mac / Windows 并显示对应键位。也可在选项中锁定一种布局。">Auto-detects Mac or Windows and shows correct key labels. Or lock to one layout in options.</span></span>
+      </li>
+      <li>
+        <span class="marker" aria-hidden="true">&#x2699;</span>
+        <span class="body"><strong data-en="Configurable" data-zh="自由配置">Configurable</strong><span data-en="Choose your trigger key (Alt, Shift, Ctrl), hold duration (200–5000 ms), and platform layout." data-zh="可选触发键（Alt、Shift、Ctrl），可调长按时长（200–5000ms），可切换平台布局。">Choose your trigger key (Alt, Shift, Ctrl), hold duration (200–5000 ms), and platform layout.</span></span>
+      </li>
+      <li>
+        <span class="marker" aria-hidden="true">&#x1F512;</span>
+        <span class="body"><strong data-en="Zero data collection" data-zh="零数据收集">Zero data collection</strong><span data-en="No network calls, no analytics, no tracking. Your settings stay in your browser." data-zh="无网络请求，无分析统计，无追踪。你的设置只留在你的浏览器里。">No network calls, no analytics, no tracking. Your settings stay in your browser.</span></span>
+      </li>
     </ul>
 
-    <h2>2. 我们如何使用信息</h2>
-    <p>保存的设置仅用于以下功能：</p>
+    <h2 data-en="How it works" data-zh="使用方法">How it works</h2>
+    <ol class="steps">
+      <li data-en="Open any http or https webpage." data-zh="打开任意 http 或 https 网页。">Open any http or https webpage.</li>
+      <li data-en="Hold the trigger key until the hotkey panel appears." data-zh="按住触发键直到快捷键面板出现。">Hold the trigger key until the hotkey panel appears.</li>
+      <li data-en="Release the key to dismiss. Click the extension icon in the toolbar to change settings." data-zh="松手关闭面板。点击工具栏扩展图标可修改设置。">Release the key to dismiss. Click the extension icon in the toolbar to change settings.</li>
+    </ol>
+  </section>
+
+  <section role="tabpanel" id="privacy" aria-labelledby="tab-privacy">
+    <h1 data-en="Privacy Policy" data-zh="隐私政策">Privacy Policy</h1>
+    <p class="effective-date" data-en="Effective date: April 17, 2026" data-zh="生效日期：2026 年 4 月 17 日">Effective date: April 17, 2026</p>
+
+    <p data-en="Chrome Hotkeys is a locally-running Chrome extension. It shows a floating hotkey reference panel when you long-press a configurable key on any web page." data-zh="Chrome Hotkeys 是一款纯本地运行的 Chrome 扩展，仅在你长按配置键时显示快捷键参考面板。">Chrome Hotkeys is a locally-running Chrome extension. It shows a floating hotkey reference panel when you long-press a configurable key on any web page.</p>
+
+    <h2 data-en="1. What we collect" data-zh="1. 信息收集">1. What we collect</h2>
+    <p data-en="This extension does not collect, upload, or sell any personal information." data-zh="本扩展不收集、不上传、不出售任何个人信息。">This extension does not collect, upload, or sell any personal information.</p>
     <ul>
-      <li>识别你选择的触发键</li>
-      <li>决定显示热键面板所需的长按时长</li>
-      <li>决定显示 Mac 版或 Windows 版热键列表</li>
+      <li data-en="It stores 3 user preferences locally: trigger key, hold duration, and hotkey layout (Auto / Mac / Windows)." data-zh="仅存储 3 项用户偏好：触发键、长按时长、快捷键布局（自动 / Mac / Windows）。">It stores 3 user preferences locally: trigger key, hold duration, and hotkey layout (Auto / Mac / Windows).</li>
+      <li data-en="These preferences are saved via Chrome's <code>chrome.storage.sync</code> API and only synchronize within your own Chrome browser." data-zh="这些偏好通过 Chrome 的 <code>chrome.storage.sync</code> 接口保存，仅在你本人的 Chrome 浏览器内同步。">These preferences are saved via Chrome's <code>chrome.storage.sync</code> API and only synchronize within your own Chrome browser.</li>
+      <li data-en="The extension does not read passwords, form data, browsing history, page content, chat messages, payment information, or identity information." data-zh="本扩展不读取密码、表单数据、浏览历史、页面内容、聊天消息、支付信息或身份信息。">The extension does not read passwords, form data, browsing history, page content, chat messages, payment information, or identity information.</li>
     </ul>
 
-    <h2>3. 权限说明</h2>
+    <h2 data-en="2. How we use information" data-zh="2. 信息使用">2. How we use information</h2>
+    <p data-en="Stored preferences are used only for:" data-zh="存储的偏好仅用于：">Stored preferences are used only for:</p>
     <ul>
-      <li><code>storage</code>：用于保存用户设置。</li>
-      <li><code>content_scripts</code> 匹配 <code>http://*/*</code> 和 <code>https://*/*</code>：用于在已打开网页中监听触发键，并在当前页面渲染热键面板。</li>
+      <li data-en="Recognizing your chosen trigger key" data-zh="识别你选择的触发键">Recognizing your chosen trigger key</li>
+      <li data-en="Determining how long you need to hold before the panel appears" data-zh="判断需要长按多久才弹出面板">Determining how long you need to hold before the panel appears</li>
+      <li data-en="Showing Mac or Windows hotkey labels" data-zh="显示 Mac 或 Windows 对应的快捷键标签">Showing Mac or Windows hotkey labels</li>
     </ul>
 
-    <h2>4. 数据共享</h2>
-    <p>本扩展不向开发者服务器发送数据，也不与第三方共享用户数据。</p>
+    <h2 data-en="3. Permissions explained" data-zh="3. 权限说明">3. Permissions explained</h2>
+    <ul>
+      <li data-en="<code>storage</code>: used to persist your settings." data-zh="<code>storage</code>：用于持久保存你的设置。"><code>storage</code>: used to persist your settings.</li>
+      <li data-en="Content scripts on <code>http://*/*</code> and <code>https://*/*</code>: used to listen for the trigger key and render the hotkey panel on the current page." data-zh="在 <code>http://*/*</code> 和 <code>https://*/*</code> 上运行内容脚本：用于监听触发键并在当前页面渲染快捷键面板。">Content scripts on <code>http://*/*</code> and <code>https://*/*</code>: used to listen for the trigger key and render the hotkey panel on the current page.</li>
+    </ul>
 
-    <h2>5. 数据存储与安全</h2>
-    <p>设置数据保存在 Chrome 浏览器提供的存储机制中。扩展自身没有远程服务器、数据库或分析平台。</p>
+    <h2 data-en="4. Data sharing" data-zh="4. 数据共享">4. Data sharing</h2>
+    <p data-en="This extension does not send data to any developer server and does not share user data with third parties." data-zh="本扩展不向任何开发者服务器发送数据，不与任何第三方共享用户数据。">This extension does not send data to any developer server and does not share user data with third parties.</p>
 
-    <h2>6. 儿童隐私</h2>
-    <p>本扩展面向一般用户，功能为热键工具。扩展没有专门面向儿童设计的数据收集逻辑。</p>
+    <h2 data-en="5. Data storage and security" data-zh="5. 数据存储与安全">5. Data storage and security</h2>
+    <p data-en="Settings are stored in Chrome's built-in storage mechanism. The extension has no remote servers, databases, or analytics platforms." data-zh="设置保存在 Chrome 内置存储机制中。本扩展不包含远程服务器、数据库或分析平台。">Settings are stored in Chrome's built-in storage mechanism. The extension has no remote servers, databases, or analytics platforms.</p>
 
-    <h2>7. 政策更新</h2>
-    <p>如果扩展未来增加新的权限、联网能力或数据处理逻辑，本页面会同步更新生效日期和说明。</p>
+    <h2 data-en="6. Children's privacy" data-zh="6. 儿童隐私">6. Children's privacy</h2>
+    <p data-en="This extension is a general-purpose hotkey reference tool. It contains no data collection logic targeting children." data-zh="本扩展是通用快捷键参考工具，不包含任何针对儿童的数据收集逻辑。">This extension is a general-purpose hotkey reference tool. It contains no data collection logic targeting children.</p>
 
-    <h2>8. 联系方式</h2>
-    <p>如需联系开发者，请在 Chrome Web Store 扩展详情页填写你的开发者邮箱，并将该邮箱同步放在这里。</p>
-  </main>
+    <h2 data-en="7. Policy updates" data-zh="7. 政策更新">7. Policy updates</h2>
+    <p data-en="If the extension adds new permissions, network capabilities, or data processing in the future, this page will be updated with a new effective date." data-zh="如果将来增加新权限、网络功能或数据处理能力，本页面将更新并注明新的生效日期。">If the extension adds new permissions, network capabilities, or data processing in the future, this page will be updated with a new effective date.</p>
+
+    <h2 data-en="8. Contact" data-zh="8. 联系方式">8. Contact</h2>
+    <p data-en="To reach the developer, email <a href='mailto:jescain2024@gmail.com'>jescain2024@gmail.com</a>." data-zh="如需联系开发者，请发送邮件至 <a href='mailto:jescain2024@gmail.com'>jescain2024@gmail.com</a>。">To reach the developer, email <a href="mailto:jescain2024@gmail.com">jescain2024@gmail.com</a>.</p>
+  </section>
+
+  <section role="tabpanel" id="support" aria-labelledby="tab-support">
+    <h1 data-en="Support" data-zh="支持">Support</h1>
+    <p class="lede" data-en="Found a bug? Have a feature request? Open a GitHub issue or email <a href='mailto:jescain2024@gmail.com'>jescain2024@gmail.com</a>." data-zh="发现 bug？有功能建议？可通过 GitHub Issues 反馈，或发邮件至 <a href='mailto:jescain2024@gmail.com'>jescain2024@gmail.com</a>。">Found a bug? Have a feature request? Open a GitHub issue or email <a href="mailto:jescain2024@gmail.com">jescain2024@gmail.com</a>.</p>
+
+    <p style="margin-bottom:28px;">
+      <a href="https://github.com/EvilIrving/chrome-hotkeys/issues" class="support-link" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        <span data-en="Open an issue on GitHub" data-zh="在 GitHub 提交 Issue">Open an issue on GitHub</span>
+      </a>
+    </p>
+
+    <h2 data-en="Common questions" data-zh="常见问题">Common questions</h2>
+    <dl>
+      <dt data-en="The hotkey panel doesn't appear when I hold the key." data-zh="按住触发键后面板没有出现。">The hotkey panel doesn't appear when I hold the key.</dt>
+      <dd data-en="Make sure you are on an http or https page (not chrome:// or a new tab). Try increasing the hold duration in options. Also check that your trigger key is not being intercepted by another extension." data-zh="请确认你在 http 或 https 页面（非 chrome:// 或新标签页）。尝试在选项中增加长按时长。同时检查触发键是否被其他扩展占用。">Make sure you are on an http or https page (not chrome:// or a new tab). Try increasing the hold duration in options. Also check that your trigger key is not being intercepted by another extension.</dd>
+
+      <dt data-en="How do I change the trigger key or hold duration?" data-zh="如何修改触发键或长按时长？">How do I change the trigger key or hold duration?</dt>
+      <dd data-en="Click the extension icon in the Chrome toolbar to open the options popup. Changes save automatically." data-zh="点击 Chrome 工具栏中的扩展图标打开选项弹窗，修改后自动保存。">Click the extension icon in the Chrome toolbar to open the options popup. Changes save automatically.</dd>
+
+      <dt data-en="Does this work on Edge, Brave, or other Chromium browsers?" data-zh="支持 Edge、Brave 等 Chromium 浏览器吗？">Does this work on Edge, Brave, or other Chromium browsers?</dt>
+      <dd data-en="Yes. It works in any Chromium-based browser that supports Manifest V3 extensions." data-zh="支持。本扩展兼容所有支持 Manifest V3 扩展的 Chromium 内核浏览器。">Yes. It works in any Chromium-based browser that supports Manifest V3 extensions.</dd>
+    </dl>
+  </section>
+</main>
+
+<footer>
+  <nav>
+    <a href="https://github.com/EvilIrving/chrome-hotkeys" target="_blank" rel="noopener">GitHub</a>
+    <a href="#privacy" data-en="Privacy Policy" data-zh="隐私政策">Privacy Policy</a>
+    <a href="#support" data-en="Support" data-zh="支持">Support</a>
+  </nav>
+</footer>
+
+<script>
+  (function () {
+    var tabs = document.querySelectorAll('nav.tabs a[role="tab"]');
+    var panels = document.querySelectorAll('section[role="tabpanel"]');
+    var langButtons = document.querySelectorAll('.lang-switch button[data-lang]');
+    var htmlEl = document.documentElement;
+
+    var TITLE_EN = 'Chrome Hotkeys — Press & hold, see hotkeys, release';
+    var TITLE_ZH = 'Chrome Hotkeys — 长按出热键，松手即关闭';
+    var DESC_EN = 'Hold a configurable key on any webpage to see a floating Chrome hotkey panel. Auto-detects Mac or Windows. Zero data collection.';
+    var DESC_ZH = '在任意网页长按触发键，弹出 Chrome 常用快捷键面板。自动识别 Mac 或 Windows 键位。零数据收集。';
+
+    /* ── Tab routing ── */
+
+    function activateTab(hash) {
+      var id = (hash || '#home').replace(/^#/, '');
+      var match = null;
+
+      tabs.forEach(function (t) {
+        var isActive = t.getAttribute('href') === '#' + id;
+        t.setAttribute('aria-current', isActive ? 'page' : 'false');
+        if (isActive) match = t;
+      });
+
+      panels.forEach(function (p) {
+        p.classList.toggle('active', p.id === id);
+      });
+
+      if (!match) {
+        activateTab('#home');
+        history.replaceState(null, '', '#home');
+      }
+    }
+
+    window.addEventListener('hashchange', function () {
+      activateTab(location.hash);
+    });
+
+    if (location.hash) {
+      activateTab(location.hash);
+    } else {
+      activateTab('#home');
+      history.replaceState(null, '', '#home');
+    }
+
+    /* ── Language switching ── */
+
+    function setLang(lang) {
+      // Update switcher buttons
+      langButtons.forEach(function (btn) {
+        var isActive = btn.getAttribute('data-lang') === lang;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', String(isActive));
+      });
+
+      // Update html lang
+      htmlEl.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
+
+      // Update title & meta
+      document.title = lang === 'zh' ? TITLE_ZH : TITLE_EN;
+      var metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', lang === 'zh' ? DESC_ZH : DESC_EN);
+
+      // Update all elements with data-en/data-zh
+      document.querySelectorAll('[data-en][data-zh]').forEach(function (el) {
+        var text = el.getAttribute('data-' + lang);
+        if (text != null) el.innerHTML = text;
+      });
+    }
+
+    function getLang() {
+      var stored = localStorage.getItem('chrome-hotkeys-lang');
+      if (stored === 'en' || stored === 'zh') return stored;
+      return 'en';
+    }
+
+    langButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var lang = btn.getAttribute('data-lang');
+        localStorage.setItem('chrome-hotkeys-lang', lang);
+        setLang(lang);
+      });
+    });
+
+    // Apply on load
+    setLang(getLang());
+  })();
+</script>
+
 </body>
 </html>
