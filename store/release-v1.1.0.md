@@ -1,62 +1,73 @@
 # Chrome Web Store Submission — v1.1.0
 
-## Store Listing
-- Name: Chrome Shortcuts Cheatsheet
-- Tagline: Hold a key to see every Chrome shortcut you keep forgetting.
-- Short description: Hold a customizable trigger key to show a Chrome shortcuts cheatsheet overlay. Auto-detects Mac/Windows layouts. Release to dismiss.
-- Category: Productivity
-- Language: English (en)
-- Tags: chrome shortcuts, keyboard shortcuts, productivity, cheat sheet, browser tools, shortcut overlay, keyboard navigation, chrome extension
+## Package Info
+- Title (软件包中的标题): Chrome Hotkeys
+- Summary (软件包中的摘要): Hold a key to show a Chrome hotkey panel. Auto-detects Mac or Windows layout. Release to close.
+- Description (说明):
+  Chrome Hotkeys puts the hotkeys you need right into the page you're browsing.
 
-Chrome Shortcuts Cheatsheet puts the shortcuts you need right into the page you're browsing.
+  Hold your chosen trigger key for a moment and the extension shows a hotkey panel in the top-right corner. Release the key and the panel disappears. The whole interaction is lightweight — it never interrupts your browsing flow. Ideal if you're learning hotkeys, switching between Mac and Windows, or just tired of searching "Chrome hotkey" every time.
 
-Hold your chosen trigger key for a moment and the extension shows a shortcut panel in the top-right corner. Release the key and the panel disappears. The whole interaction is lightweight — it never interrupts your browsing flow. Ideal if you're learning shortcuts, switching between Mac and Windows, or just tired of searching "Chrome shortcut" every time.
+  Features:
+  - Hold to reveal, release to dismiss — no clicks needed
+  - Auto-detects Mac or Windows hotkey layout (or lock to one platform in options)
+  - Customizable trigger key: Right Alt, Left Alt, Right Shift, Left Shift, or Right Ctrl
+  - Adjustable hold duration (200–5000 ms)
+  - Settings stored locally via chrome.storage.sync — no accounts, no servers
+  - Available in English and Simplified Chinese
 
-Features:
-- Hold to reveal, release to dismiss — no clicks needed
-- Auto-detects Mac or Windows shortcut layout (or lock to one platform in options)
-- Customizable trigger key: Right Alt, Left Alt, Right Shift, Left Shift, or Right Ctrl
-- Adjustable hold duration (200–5000 ms)
-- Settings stored locally via chrome.storage.sync — no accounts, no servers
-- Available in English and Simplified Chinese
+  Who's it for:
+  - Anyone who wants to look up Chrome hotkeys without leaving the page
+  - People switching between Mac and Windows who mix up modifier keys
+  - Developers, designers, and power users who want faster keyboard navigation
+  - Anyone tired of Googling "Chrome keyboard hotkeys" over and over
 
-Who's it for:
-- Anyone who wants to look up Chrome shortcuts without leaving the page
-- People switching between Mac and Windows who mix up modifier keys
-- Developers, designers, and power users who want faster keyboard navigation
-- Anyone tired of Googling "Chrome keyboard shortcuts" over and over
+- Category (分类): 工具 (Tools)
 
-## Developer Info
-- Email: [REQUIRED — fill in your contact email]
-- Support URL: https://github.com/cain/chrome-keys
+## Single Purpose (单一用途)
+0/1000
+Show a Chrome keyboard hotkey panel inside the current web page when the user long-presses a customizable trigger key, with settings for key choice, hold duration, and platform layout.
 
-## Questionnaire
-- Single purpose: Show a Chrome shortcut cheatsheet in the current page when the user long-presses a chosen key, and let the user customize the trigger key, hold duration, and displayed platform layout.
+## Permission Justifications (需请求权限的理由)
+- `storage` (0/1000): Stores user preferences for trigger key, hold duration, and platform layout via chrome.storage.sync so settings sync across the user's signed-in Chrome browsers. No data is ever sent off-device.
 
-Permission justification:
-- `storage`: Store the user's preferences for trigger key, hold duration, and platform layout. No data is ever sent off-device.
-- `http://*/*` & `https://*/*`: The extension listens for the trigger key and renders the shortcut panel directly inside the current web page. It does not read, collect, or transmit any page content.
+- Host permissions (0/1000): The extension's content script runs on http://*/* and https://*/* to detect the trigger key press and render the hotkey panel directly inside the current page. It does not read, collect, store, or transmit any page content, browsing history, or form data.
 
-Data collection:
-- Collect user data? No
-- Sell user data? No
-- Transfer to third parties? No
-- Use for creditworthiness/lending? No
+## Remote Code (远程代码)
+- Using remote code? No
 
-All data collection categories should be marked as "No data collected." No remote network requests, no analytics, no ads, no accounts, no external services. Settings stored exclusively via `chrome.storage.sync`.
+## Data Usage (数据使用)
 
-Additional compliance:
-- Uses cryptography? No
-- Requires offline access? No
-- Contains minified/obfuscated code? No
+### Data Collection Categories
+- [ ] Personally identifiable information
+- [ ] Health information
+- [ ] Financial and payment information
+- [ ] Authentication information
+- [ ] Personal communications
+- [ ] Location
+- [ ] Web history
+- [ ] User activity
+- [ ] Website content
 
-## Privacy
-- Privacy policy URL: publish `store/privacy.html` to a public HTTPS URL, then paste here
-- The extension stores only three local preferences (trigger key, hold duration, platform layout) via `chrome.storage.sync`. No personal information, browsing history, or page content is ever collected, stored, or transmitted.
+### Data Use Certifications
+- [x] I do not sell or transfer user data to third parties for uses outside of approved use cases
+- [x] I do not use or transfer user data for purposes unrelated to my product's single purpose
+- [x] I do not use or transfer user data to determine creditworthiness or for lending
 
-## Store Assets
-- Icon: 128×128 px (use `assets/icons/icon128.png`)
-- Small promo tile: 440×280 px [ ]
-- Large promo tile: 920×680 px [ ]
-- Marquee promo tile: 1400×560 px [ ]
-- Screenshots: 1280×800 px, at least 1 required [ ]
+## Official URLs
+- Associated website: None
+- Homepage URL (首页网址): https://github.com/cain/chrome-keys
+- Support page URL (支持信息页面网址): https://github.com/cain/chrome-keys/issues
+
+## Adult Content
+- Contains adult content? No
+
+## Privacy Policy (隐私权政策)
+- URL (max 2048 chars): [REQUIRED — publish `store/privacy.html` to a public HTTPS URL, then paste here]
+
+## Product Support
+- Enable product support? Off
+
+## Distribution
+- Payment: Free
+- Visibility: Public

@@ -1,12 +1,12 @@
-# Chrome Keyboard Shortcuts Cheatsheet
+# Chrome Keyboard Hotkeys
 
-**Press and hold** a key you choose to show a floating cheatsheet of common Chrome shortcuts; release to dismiss. The extension can **auto-detect Mac vs. Windows** shortcut labels, or you can lock the sheet to one layout in the options.
+**Press and hold** a key you choose to show a floating hotkey panel of common Chrome hotkeys; release to dismiss. The extension can **auto-detect Mac vs. Windows** hotkey labels, or you can lock the sheet to one layout in the options.
 
 [中文说明 → README.md](README.md)
 
 ## Features
 
-- **Cheatsheet overlay**: On normal web pages (`http` / `https`), hold the trigger key for the configured duration to show categorized shortcuts.
+- **Hotkey panel**: On normal web pages (`http` / `https`), hold the trigger key for the configured duration to show categorized hotkeys.
 - **Configurable**: Trigger key (e.g. left/right Alt, left/right Shift, right Ctrl), hold duration (200–5000 ms, default 800 ms), and sheet mode: **Auto / Always Mac / Always Windows**.
 - **Options**: Click the extension icon in the toolbar to open options; or use **Extension options** from `chrome://extensions`.
 

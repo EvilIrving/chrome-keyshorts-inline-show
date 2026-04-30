@@ -1,8 +1,32 @@
+// ── Developer config ──────────────────────────────────────────
+// Set lang to "en" | "zh_CN" | null (auto) to force display language.
+const DEV_CONFIG = {
+  lang: "null",
+};
+// ───────────────────────────────────────────────────────────────
+
 const DEFAULT_SETTINGS = {
   triggerCode: "AltRight",
   holdMs: 800,
   sheetPlatform: "auto",
 };
+
+// Custom i18n helper – reads from DEV_CONFIG.lang when set
+let _messages = null;
+
+function t(key, subs) {
+  if (_messages && _messages[key]) {
+    let msg = _messages[key].message;
+    if (subs !== undefined) {
+      const arr = Array.isArray(subs) ? subs : [subs];
+      for (let i = 0; i < arr.length; i++) {
+        msg = msg.replace("$" + (i + 1), arr[i]);
+      }
+    }
+    return msg;
+  }
+  return chrome.i18n.getMessage(key, subs);
+}
 
 const TRIGGER_OPTIONS = [
   { code: "AltRight", labelKey: "trigger_alt_right" },
@@ -29,14 +53,14 @@ function fillSelect(select, options, getValue, getLabel) {
 }
 
 function setStaticText() {
-  document.title = chrome.i18n.getMessage("options_title");
-  document.getElementById("page-title").textContent = chrome.i18n.getMessage("options_title");
-  document.getElementById("heading").textContent = chrome.i18n.getMessage("options_heading");
-  document.getElementById("trigger-label").textContent = chrome.i18n.getMessage("options_trigger_label");
-  document.getElementById("trigger-hint").textContent = chrome.i18n.getMessage("options_trigger_hint");
-  document.getElementById("hold-label").textContent = chrome.i18n.getMessage("options_hold_label");
-  document.getElementById("hold-hint").textContent = chrome.i18n.getMessage("options_hold_hint");
-  document.getElementById("platform-label").textContent = chrome.i18n.getMessage("options_platform_label");
+  document.title = t("options_title");
+  document.getElementById("page-title").textContent = t("options_title");
+  document.getElementById("heading").textContent = t("options_heading");
+  document.getElementById("trigger-label").textContent = t("options_trigger_label");
+  document.getElementById("trigger-hint").textContent = t("options_trigger_hint");
+  document.getElementById("hold-label").textContent = t("options_hold_label");
+  document.getElementById("hold-hint").textContent = t("options_hold_hint");
+  document.getElementById("platform-label").textContent = t("options_platform_label");
 }
 
 function load() {
@@ -50,13 +74,13 @@ function load() {
     trigger,
     TRIGGER_OPTIONS,
     (o) => o.code,
-    (o) => chrome.i18n.getMessage(o.labelKey)
+    (o) => t(o.labelKey)
   );
   fillSelect(
     sheetPlatform,
     PLATFORM_OPTIONS,
     (o) => o.value,
-    (o) => chrome.i18n.getMessage(o.labelKey)
+    (o) => t(o.labelKey)
   );
 
   chrome.storage.sync.get(DEFAULT_SETTINGS, (items) => {
@@ -83,17 +107,30 @@ function save() {
   };
 
   chrome.storage.sync.set(payload, () => {
-    status.textContent = chrome.i18n.getMessage("options_saved");
+    status.textContent = t("options_saved");
     window.setTimeout(() => {
       status.textContent = "";
     }, 2000);
   });
 }
 
+function init() {
+  if (DEV_CONFIG.lang) {
+    fetch(chrome.runtime.getURL("_locales/" + DEV_CONFIG.lang + "/messages.json"))
+      .then(function (r) { return r.json(); })
+      .then(function (messages) {
+        _messages = messages;
+        load();
+      });
+  } else {
+    load();
+  }
+}
+
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", load);
+  document.addEventListener("DOMContentLoaded", init);
 } else {
-  load();
+  init();
 }
 
 document.getElementById("trigger").addEventListener("change", save);

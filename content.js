@@ -2,13 +2,39 @@
   if (window.__chromeKeysBound) return;
   window.__chromeKeysBound = true;
 
-  const PANEL_ID = "__chrome-keys-cheatsheet-root";
+  // ── Developer config ──────────────────────────────────────────
+  // Set lang to "en" | "zh_CN" | null (auto) to force display language.
+  // Set showPanelByDefault to true so the hotkey panel appears on every page load.
+  const DEV_CONFIG = {
+    lang: "null",
+    showPanelByDefault: false,
+  };
+  // ───────────────────────────────────────────────────────────────
+
+  const PANEL_ID = "__chrome-keys-hotkey-panel-root";
 
   const DEFAULT_SETTINGS = {
     triggerCode: "AltRight",
     holdMs: 800,
     sheetPlatform: "auto",
   };
+
+  // Custom i18n helper – reads from DEV_CONFIG.lang when set
+  let _messages = null;
+
+  function t(key, subs) {
+    if (_messages && _messages[key]) {
+      let msg = _messages[key].message;
+      if (subs !== undefined) {
+        const arr = Array.isArray(subs) ? subs : [subs];
+        for (let i = 0; i < arr.length; i++) {
+          msg = msg.replace("$" + (i + 1), arr[i]);
+        }
+      }
+      return msg;
+    }
+    return chrome.i18n.getMessage(key, subs);
+  }
 
   const TRIGGER_CODE_KEYS = {
     AltRight: "trigger_alt_right",
@@ -20,7 +46,7 @@
 
   function getTriggerLabel(code) {
     const key = TRIGGER_CODE_KEYS[code];
-    return key ? chrome.i18n.getMessage(key) : code;
+    return key ? t(key) : code;
   }
 
   /** @type {typeof DEFAULT_SETTINGS} */
@@ -34,35 +60,35 @@
         ["action_new_window", "\u2318 + N"],
         ["action_new_incognito_window", "\u2318 + Shift + N"],
         ["action_quit_chrome", "\u2318 + Q"],
-        ["action_fullscreen", "shortcut_fn_esc_mac"],
+        ["action_fullscreen", "hotkey_fn_esc_mac"],
         ["action_new_tab", "\u2318 + T"],
         ["action_reopen_closed_tab", "\u2318 + Shift + T"],
         ["action_close_tab", "\u2318 + W"],
         ["action_next_prev_tab", "\u2318 + Option + \u2192 / \u2190"],
         ["action_tab_1_to_8", "\u2318 + 1 \u2026 8"],
         ["action_last_tab", "\u2318 + 9"],
-        ["action_back_forward", "shortcut_back_forward_mac"],
+        ["action_back_forward", "hotkey_back_forward_mac"],
       ],
     },
     {
       titleKey: "section_addressbar_search",
       rows: [
         ["action_focus_address_bar", "\u2318 + L"],
-        ["action_search_default_engine", "shortcut_type_return_mac"],
-        ["action_switch_search_engine", "shortcut_engine_tab"],
+        ["action_search_default_engine", "hotkey_type_return_mac"],
+        ["action_switch_search_engine", "hotkey_engine_tab"],
         ["action_autocomplete_www", "Ctrl + Return"],
-        ["action_open_url_bg_tab", "shortcut_url_bg_mac"],
+        ["action_open_url_bg_tab", "hotkey_url_bg_mac"],
       ],
     },
     {
       titleKey: "section_mouse_drag",
       rows: [
-        ["action_open_link_bg_tab", "shortcut_click_link_bg_mac"],
-        ["action_open_link_fg_tab", "shortcut_click_link_fg_mac"],
-        ["action_open_link_new_window", "shortcut_click_link_win_new"],
-        ["action_download_link", "shortcut_click_link_dl_mac"],
-        ["action_drag_tab_new_window", "shortcut_drag_out"],
-        ["action_drag_tab_into_window", "shortcut_drag_in"],
+        ["action_open_link_bg_tab", "hotkey_click_link_bg_mac"],
+        ["action_open_link_fg_tab", "hotkey_click_link_fg_mac"],
+        ["action_open_link_new_window", "hotkey_click_link_win_new"],
+        ["action_download_link", "hotkey_click_link_dl_mac"],
+        ["action_drag_tab_new_window", "hotkey_drag_out"],
+        ["action_drag_tab_into_window", "hotkey_drag_in"],
       ],
     },
     {
@@ -73,7 +99,7 @@
         ["action_hard_reload", "\u2318 + Shift + R"],
         ["action_stop_loading", "Esc"],
         ["action_next_prev_focusable", "Tab / Shift + Tab"],
-        ["action_scroll_page", "shortcut_space_scroll"],
+        ["action_scroll_page", "hotkey_space_scroll"],
         ["action_zoom", "\u2318 + + / \u2212 / 0"],
         ["action_bookmark", "\u2318 + D"],
         ["action_bookmark_all_tabs", "\u2318 + Shift + D"],
@@ -109,7 +135,7 @@
         ["action_new_tab", "Ctrl + T"],
         ["action_reopen_closed_tab", "Ctrl + Shift + T"],
         ["action_close_tab", "Ctrl + W"],
-        ["action_next_prev_tab", "shortcut_next_prev_tab_win"],
+        ["action_next_prev_tab", "hotkey_next_prev_tab_win"],
         ["action_tab_1_to_8", "Ctrl + 1 \u2026 8"],
         ["action_last_tab", "Ctrl + 9"],
         ["action_back_forward", "Alt + \u2190 / \u2192"],
@@ -119,21 +145,21 @@
       titleKey: "section_addressbar_search",
       rows: [
         ["action_focus_address_bar", "Ctrl + L"],
-        ["action_search_default_engine", "shortcut_type_return_win"],
-        ["action_switch_search_engine", "shortcut_engine_tab"],
+        ["action_search_default_engine", "hotkey_type_return_win"],
+        ["action_switch_search_engine", "hotkey_engine_tab"],
         ["action_autocomplete_www", "Ctrl + Enter"],
-        ["action_open_url_bg_tab", "shortcut_url_bg_win"],
+        ["action_open_url_bg_tab", "hotkey_url_bg_win"],
       ],
     },
     {
       titleKey: "section_mouse_drag",
       rows: [
-        ["action_open_link_bg_tab", "shortcut_click_link_bg_win"],
-        ["action_open_link_fg_tab", "shortcut_click_link_fg_win"],
-        ["action_open_link_new_window", "shortcut_click_link_win_new"],
-        ["action_download_link", "shortcut_click_link_dl_win"],
-        ["action_drag_tab_new_window", "shortcut_drag_out"],
-        ["action_drag_tab_into_window", "shortcut_drag_in"],
+        ["action_open_link_bg_tab", "hotkey_click_link_bg_win"],
+        ["action_open_link_fg_tab", "hotkey_click_link_fg_win"],
+        ["action_open_link_new_window", "hotkey_click_link_win_new"],
+        ["action_download_link", "hotkey_click_link_dl_win"],
+        ["action_drag_tab_new_window", "hotkey_drag_out"],
+        ["action_drag_tab_into_window", "hotkey_drag_in"],
       ],
     },
     {
@@ -144,7 +170,7 @@
         ["action_hard_reload", "Ctrl + Shift + R"],
         ["action_stop_loading", "Esc"],
         ["action_next_prev_focusable", "Tab / Shift + Tab"],
-        ["action_scroll_page", "shortcut_space_scroll"],
+        ["action_scroll_page", "hotkey_space_scroll"],
         ["action_zoom", "Ctrl + + / \u2212 / 0"],
         ["action_bookmark", "Ctrl + D"],
         ["action_bookmark_all_tabs", "Ctrl + Shift + D"],
@@ -162,7 +188,7 @@
         ["action_downloads", "Ctrl + J"],
         ["action_find_in_page", "Ctrl + F"],
         ["action_find_next_prev", "Ctrl + G / Ctrl + Shift + G"],
-        ["action_devtools", "shortcut_devtools_win"],
+        ["action_devtools", "hotkey_devtools_win"],
         ["action_clear_browsing_data", "Ctrl + Shift + Delete"],
         ["action_switch_user", "Ctrl + Shift + M"],
       ],
@@ -194,7 +220,7 @@
     const name = getTriggerLabel(config.triggerCode);
     const sec = formatHoldSeconds(config.holdMs);
     const os = kind === "mac" ? "Mac" : "Windows";
-    return chrome.i18n.getMessage("panel_hint", [os, name, sec]);
+    return t("panel_hint", [os, name, sec]);
   }
 
   function buildSectionBlock(section) {
@@ -203,15 +229,15 @@
 
     const title = document.createElement("h3");
     title.className = "block-title";
-    title.textContent = chrome.i18n.getMessage(section.titleKey);
+    title.textContent = t(section.titleKey);
 
     const table = document.createElement("table");
     for (const [actionKey, combo] of section.rows) {
       const tr = document.createElement("tr");
       const td1 = document.createElement("td");
-      td1.textContent = chrome.i18n.getMessage(actionKey);
+      td1.textContent = t(actionKey);
       const td2 = document.createElement("td");
-      td2.textContent = chrome.i18n.getMessage(combo) || combo;
+      td2.textContent = t(combo) || combo;
       tr.appendChild(td1);
       tr.appendChild(td2);
       table.appendChild(tr);
@@ -333,7 +359,7 @@
     const hint = root.querySelector(".hint");
     if (!h2 || !grid || !hint) return;
 
-    h2.textContent = chrome.i18n.getMessage(titleKey);
+    h2.textContent = t(titleKey);
     grid.replaceChildren();
     for (const section of sections) {
       grid.appendChild(buildSectionBlock(section));
@@ -351,7 +377,7 @@
     root = document.createElement("div");
     root.id = PANEL_ID;
     root.setAttribute("role", "dialog");
-    root.setAttribute("aria-label", chrome.i18n.getMessage("panel_aria_label"));
+    root.setAttribute("aria-label", t("panel_aria_label"));
 
     injectPanelStyles(root);
 
@@ -426,6 +452,30 @@
     const root = document.getElementById(PANEL_ID);
     if (root) populatePanelBody(root);
   }
+
+  // Load dev language override
+  function loadDevLang() {
+    if (!DEV_CONFIG.lang) return;
+    var url = chrome.runtime.getURL("_locales/" + DEV_CONFIG.lang + "/messages.json");
+    return fetch(url)
+      .then(function (r) { return r.json(); })
+      .then(function (messages) {
+        _messages = messages;
+        console.log("[chrome-keys] dev lang loaded: " + DEV_CONFIG.lang);
+      })
+      .catch(function (err) {
+        console.error("[chrome-keys] failed to load dev lang, falling back to browser locale", err);
+      });
+  }
+
+  function init() {
+    if (DEV_CONFIG.showPanelByDefault) {
+      showPanel();
+    }
+  }
+
+  var ready = DEV_CONFIG.lang ? loadDevLang() : Promise.resolve();
+  ready.then(init);
 
   chrome.storage.sync.get(DEFAULT_SETTINGS, (items) => {
     Object.assign(config, items);

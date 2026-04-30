@@ -1,14 +1,14 @@
 {
   "extName": {
-    "message": "Chrome 快捷键速查",
+    "message": "Chrome 热键",
     "description": "扩展名称"
   },
   "extDesc": {
-    "message": "长按显示 Chrome 常用快捷键，自动识别 Mac/Windows，松开关闭",
+    "message": "长按显示 Chrome 常用热键，自动识别 Mac/Windows，松开关闭",
     "description": "扩展描述"
   },
   "action_default_title": {
-    "message": "Chrome 快捷键速查",
+    "message": "Chrome 热键",
     "description": "工具栏图标提示"
   },
 
@@ -34,16 +34,16 @@
   },
 
   "panel_title_mac": {
-    "message": "Chrome（Mac）常用快捷键",
+    "message": "Chrome（Mac）常用热键",
     "description": "Mac 布局面板标题"
   },
   "panel_title_win": {
-    "message": "Chrome（Windows）常用快捷键",
+    "message": "Chrome（Windows）常用热键",
     "description": "Windows 布局面板标题"
   },
   "panel_aria_label": {
-    "message": "Chrome 快捷键",
-    "description": "快捷键面板无障碍标签"
+    "message": "Chrome 热键",
+    "description": "热键面板无障碍标签"
   },
   "panel_hint": {
     "message": "$1 布局 — 按住 $2 $3 秒显示，松开关闭",
@@ -102,7 +102,7 @@
   "trigger_ctrl_right": { "message": "右侧 Ctrl" },
 
   "options_title": {
-    "message": "快捷键速查 — 选项",
+    "message": "热键 — 选项",
     "description": "选项页浏览器标签标题"
   },
   "options_heading": {
@@ -119,23 +119,23 @@
   "options_platform_mac": { "message": "Mac 布局" },
   "options_platform_win": { "message": "Windows 布局" },
 
-  "shortcut_fn_esc_mac": { "message": "Fn + F（或 Esc）" },
-  "shortcut_back_forward_mac": { "message": "\u2318 + [ / ] 或 \u2190 / \u2192" },
-  "shortcut_type_return_mac": { "message": "输入后按 Return" },
-  "shortcut_type_return_win": { "message": "输入后按 Enter" },
-  "shortcut_engine_tab": { "message": "输入引擎名后按 Tab" },
-  "shortcut_url_bg_mac": { "message": "输入后 \u2318 + Return" },
-  "shortcut_url_bg_win": { "message": "输入后按 Alt + Enter" },
-  "shortcut_drag_out": { "message": "拖出标签栏" },
-  "shortcut_drag_in": { "message": "拖入窗口" },
-  "shortcut_space_scroll": { "message": "空格 / Shift + 空格" },
-  "shortcut_devtools_win": { "message": "F12 或 Ctrl + Shift + I" },
-  "shortcut_next_prev_tab_win": { "message": "Ctrl + Tab / Shift + Tab 或 Ctrl + PgDn / PgUp" },
-  "shortcut_click_link_bg_mac": { "message": "\u2318 + 点击链接" },
-  "shortcut_click_link_fg_mac": { "message": "\u2318 + Shift + 点击链接" },
-  "shortcut_click_link_win_new": { "message": "Shift + 点击链接" },
-  "shortcut_click_link_dl_mac": { "message": "Option + 点击链接" },
-  "shortcut_click_link_bg_win": { "message": "Ctrl + 点击链接" },
-  "shortcut_click_link_fg_win": { "message": "Ctrl + Shift + 点击链接" },
-  "shortcut_click_link_dl_win": { "message": "Alt + 点击链接" }
+  "hotkey_fn_esc_mac": { "message": "Fn + F（或 Esc）" },
+  "hotkey_back_forward_mac": { "message": "\u2318 + [ / ] 或 \u2190 / \u2192" },
+  "hotkey_type_return_mac": { "message": "输入后按 Return" },
+  "hotkey_type_return_win": { "message": "输入后按 Enter" },
+  "hotkey_engine_tab": { "message": "输入引擎名后按 Tab" },
+  "hotkey_url_bg_mac": { "message": "输入后 \u2318 + Return" },
+  "hotkey_url_bg_win": { "message": "输入后按 Alt + Enter" },
+  "hotkey_drag_out": { "message": "拖出标签栏" },
+  "hotkey_drag_in": { "message": "拖入窗口" },
+  "hotkey_space_scroll": { "message": "空格 / Shift + 空格" },
+  "hotkey_devtools_win": { "message": "F12 或 Ctrl + Shift + I" },
+  "hotkey_next_prev_tab_win": { "message": "Ctrl + Tab / Shift + Tab 或 Ctrl + PgDn / PgUp" },
+  "hotkey_click_link_bg_mac": { "message": "\u2318 + 点击链接" },
+  "hotkey_click_link_fg_mac": { "message": "\u2318 + Shift + 点击链接" },
+  "hotkey_click_link_win_new": { "message": "Shift + 点击链接" },
+  "hotkey_click_link_dl_mac": { "message": "Option + 点击链接" },
+  "hotkey_click_link_bg_win": { "message": "Ctrl + 点击链接" },
+  "hotkey_click_link_fg_win": { "message": "Ctrl + Shift + 点击链接" },
+  "hotkey_click_link_dl_win": { "message": "Alt + 点击链接" }
 }

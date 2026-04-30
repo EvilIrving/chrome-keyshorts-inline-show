@@ -1,14 +1,14 @@
 {
   "extName": {
-    "message": "Chrome Shortcuts Cheatsheet",
+    "message": "Chrome Hotkeys",
     "description": "Extension name"
   },
   "extDesc": {
-    "message": "Hold a key to show common Chrome shortcuts. Auto-detects Mac or Windows. Release to close.",
+    "message": "Hold a key to show common Chrome hotkeys. Auto-detects Mac or Windows. Release to close.",
     "description": "Extension description"
   },
   "action_default_title": {
-    "message": "Chrome Shortcuts Cheatsheet",
+    "message": "Chrome Hotkeys",
     "description": "Toolbar icon tooltip"
   },
 
@@ -34,20 +34,20 @@
   },
 
   "panel_title_mac": {
-    "message": "Chrome (Mac) Common Shortcuts",
+    "message": "Chrome (Mac) Hotkeys",
     "description": "Panel title for Mac layout"
   },
   "panel_title_win": {
-    "message": "Chrome (Windows) Common Shortcuts",
+    "message": "Chrome (Windows) Hotkeys",
     "description": "Panel title for Windows layout"
   },
   "panel_aria_label": {
-    "message": "Chrome Shortcuts",
-    "description": "Accessibility label for the shortcut panel"
+    "message": "Chrome Hotkeys",
+    "description": "Accessibility label for the hotkey panel"
   },
   "panel_hint": {
     "message": "$1 layout — Hold $2 $3s to show, release to close",
-    "description": "Hint text at bottom of shortcut panel. $1=OS name, $2=trigger key name, $3=hold seconds"
+    "description": "Hint text at bottom of hotkey panel. $1=OS name, $2=trigger key name, $3=hold seconds"
   },
 
   "action_new_window": { "message": "New Window" },
@@ -102,7 +102,7 @@
   "trigger_ctrl_right": { "message": "Right Ctrl" },
 
   "options_title": {
-    "message": "Shortcuts — Options",
+    "message": "Hotkeys — Options",
     "description": "Browser tab title for options page"
   },
   "options_heading": {
@@ -119,23 +119,23 @@
   "options_platform_mac": { "message": "Mac layout" },
   "options_platform_win": { "message": "Windows layout" },
 
-  "shortcut_fn_esc_mac": { "message": "Fn + F (or Esc)" },
-  "shortcut_back_forward_mac": { "message": "\u2318 + [ / ] or \u2190 / \u2192" },
-  "shortcut_type_return_mac": { "message": "Type, then Return" },
-  "shortcut_type_return_win": { "message": "Type, then Enter" },
-  "shortcut_engine_tab": { "message": "Type engine name, then Tab" },
-  "shortcut_url_bg_mac": { "message": "Type, then \u2318 + Return" },
-  "shortcut_url_bg_win": { "message": "Type, then Alt + Enter" },
-  "shortcut_drag_out": { "message": "Drag tab out" },
-  "shortcut_drag_in": { "message": "Drag tab in" },
-  "shortcut_space_scroll": { "message": "Space / Shift + Space" },
-  "shortcut_devtools_win": { "message": "F12 or Ctrl + Shift + I" },
-  "shortcut_next_prev_tab_win": { "message": "Ctrl + Tab / Shift + Tab or Ctrl + PgDn / PgUp" },
-  "shortcut_click_link_bg_mac": { "message": "\u2318 + click link" },
-  "shortcut_click_link_fg_mac": { "message": "\u2318 + Shift + click link" },
-  "shortcut_click_link_win_new": { "message": "Shift + click link" },
-  "shortcut_click_link_dl_mac": { "message": "Option + click link" },
-  "shortcut_click_link_bg_win": { "message": "Ctrl + click link" },
-  "shortcut_click_link_fg_win": { "message": "Ctrl + Shift + click link" },
-  "shortcut_click_link_dl_win": { "message": "Alt + click link" }
+  "hotkey_fn_esc_mac": { "message": "Fn + F (or Esc)" },
+  "hotkey_back_forward_mac": { "message": "\u2318 + [ / ] or \u2190 / \u2192" },
+  "hotkey_type_return_mac": { "message": "Type, then Return" },
+  "hotkey_type_return_win": { "message": "Type, then Enter" },
+  "hotkey_engine_tab": { "message": "Type engine name, then Tab" },
+  "hotkey_url_bg_mac": { "message": "Type, then \u2318 + Return" },
+  "hotkey_url_bg_win": { "message": "Type, then Alt + Enter" },
+  "hotkey_drag_out": { "message": "Drag tab out" },
+  "hotkey_drag_in": { "message": "Drag tab in" },
+  "hotkey_space_scroll": { "message": "Space / Shift + Space" },
+  "hotkey_devtools_win": { "message": "F12 or Ctrl + Shift + I" },
+  "hotkey_next_prev_tab_win": { "message": "Ctrl + Tab / Shift + Tab or Ctrl + PgDn / PgUp" },
+  "hotkey_click_link_bg_mac": { "message": "\u2318 + click link" },
+  "hotkey_click_link_fg_mac": { "message": "\u2318 + Shift + click link" },
+  "hotkey_click_link_win_new": { "message": "Shift + click link" },
+  "hotkey_click_link_dl_mac": { "message": "Option + click link" },
+  "hotkey_click_link_bg_win": { "message": "Ctrl + click link" },
+  "hotkey_click_link_fg_win": { "message": "Ctrl + Shift + click link" },
+  "hotkey_click_link_dl_win": { "message": "Alt + click link" }
 }
