@@ -9,8 +9,8 @@
 
 ## Chrome Web Store 填写项
 
-- 名称：Chrome 快捷键速查
-- 简短描述：长按自定义键显示 Chrome 常用快捷键，自动识别 Mac / Windows，松开即关闭。
+- 名称：Chrome 热键
+- 简短描述：长按自定义键显示 Chrome 常用热键，自动识别 Mac / Windows，松开即关闭。
 - 详细描述：使用 [chrome-web-store-listing.md](/Users/cain/Documents/code/chrome-keys/store/chrome-web-store-listing.md)
 - 图标：`assets/icons/icon-128.png`
 - 隐私政策 URL：发布后的 `privacy.html` 地址
@@ -21,7 +21,7 @@
 
 - 至少 1 张截图，建议 1280x800
 - 建议 3 张截图：
-  1. 网页中显示速查面板
+  1. 网页中显示热键面板
   2. 选项页里的触发键与长按设置
   3. Mac / Windows 布局切换效果
 
